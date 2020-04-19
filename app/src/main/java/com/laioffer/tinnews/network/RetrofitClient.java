@@ -2,6 +2,8 @@ package com.laioffer.tinnews.network;
 
 import android.content.Context;
 
+import com.ashokvarma.gander.GanderInterceptor;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.laioffer.tinnews.R;
 
 import java.io.IOException;
@@ -15,13 +17,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String API_KEY = My_API_KEY;
+    private static final String API_KEY = "b7ab2a5bd49148a080ad6d5484a2883d";
     private static final String BASE_URL = "https://newsapi.org/v2/";
 
     public static Retrofit newInstance(Context context) {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new HeaderInterceptor()).build();
+                .addInterceptor(new HeaderInterceptor())
+                .addInterceptor(new GanderInterceptor(context).showNotification(true))
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
+
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
