@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.laioffer.tinnews.R;
 import com.laioffer.tinnews.databinding.FragmentHomeBinding;
@@ -22,7 +23,7 @@ import com.mindorks.placeholderview.SwipeDecor;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements  TinNewsCard.OnSwipeListener{
 
     private HomeViewModel viewModel;
     private FragmentHomeBinding binding;
@@ -59,10 +60,42 @@ public class HomeFragment extends Fragment {
             if (newsResponse != null) {
                 //Log.d("HomeFragment", newsResponse.toString());
                 for(Article article : newsResponse.articles) {
-                    TinNewsCard tinNewsCard = new TinNewsCard(article);
+                    TinNewsCard tinNewsCard = new TinNewsCard(article, this);
                     binding.swipeView.addView(tinNewsCard);
                 }
             }
         });
+
+        viewModel.onFavorite().observe(
+                getViewLifecycleOwner(),
+                isSuccess -> {
+                    if(isSuccess) {
+                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getContext(), "You might have liked before", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onLike(Article news) {
+        viewModel.setFavoriteArticleInput(news);
+        if(binding.swipeView.getChildCount() < 3) {
+            viewModel.setCountryInput("us");
+        }
+    }
+
+    @Override
+    public void onDislike(Article news) {
+        if(binding.swipeView.getChildCount() < 3) {
+            viewModel.setCountryInput("us");
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onCancel();
     }
 }

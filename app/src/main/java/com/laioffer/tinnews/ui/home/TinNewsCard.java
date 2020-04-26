@@ -27,8 +27,10 @@ public class TinNewsCard {
     private TextView newsDescription;
 
     private final Article article;
+    private final OnSwipeListener onSwipeListener;
 
-    public TinNewsCard(Article news) {
+    public TinNewsCard(Article news, OnSwipeListener OnSwipeListener) {
+        this.onSwipeListener = OnSwipeListener;
         this.article = news;
     }
 
@@ -38,7 +40,7 @@ public class TinNewsCard {
  //           image.setImageResource(R.drawable.ic_empty_image);
    //     }else {
         //Picasso.get().load(article.urlToImage).into(image);
-            Picasso.get().load("https://imgcache.dealmoon.com/thumbimg.dealmoon.com/dealmoon/4b0/bb2/203/12b27f823cf7b1b1bb0cf4c.jpg_300_300_2_e765.jpg").into(image);
+            Picasso.get().load("https://i.dlpng.com/static/png/476392_preview.png").into(image);
      //   }
         newsTitle.setText(article.title);
         newsDescription.setText(article.description);
@@ -48,6 +50,7 @@ public class TinNewsCard {
     @SwipeOut
     private void onSwipedOut() {
         Log.d("EVENT", "onSwipedOut");
+        onSwipeListener.onDislike(article);
     }
 
     @SwipeCancelState
@@ -58,5 +61,12 @@ public class TinNewsCard {
     @SwipeIn
     private void onSwipeIn() {
         Log.d("EVENT", "onSwipedIn");
+        article.favorite = true;
+        onSwipeListener.onLike(article);
+    }
+
+    interface OnSwipeListener {
+        void onLike(Article news);
+        void onDislike(Article news);
     }
 }
