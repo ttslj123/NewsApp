@@ -36,12 +36,12 @@ public class TinNewsCard {
 
     @Resolve
     private void onResolved() {
- //       if (article.url == null || article.url.isEmpty()) {
- //           image.setImageResource(R.drawable.ic_empty_image);
-   //     }else {
-        //Picasso.get().load(article.urlToImage).into(image);
-            Picasso.get().load("https://i.dlpng.com/static/png/476392_preview.png").into(image);
-     //   }
+        if (article.url == null || article.url.isEmpty()) {
+            image.setImageResource(R.drawable.ic_empty_image);
+        }else {
+        Picasso.get().load(article.urlToImage).into(image);
+           // Picasso.get().load("https://i.dlpng.com/static/png/476392_preview.png").into(image);
+        }
         newsTitle.setText(article.title);
         newsDescription.setText(article.description);
 

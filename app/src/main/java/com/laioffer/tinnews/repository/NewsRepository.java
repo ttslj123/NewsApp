@@ -14,6 +14,8 @@ import com.laioffer.tinnews.model.NewsResponse;
 import com.laioffer.tinnews.network.NewsApi;
 import com.laioffer.tinnews.network.RetrofitClient;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,6 +79,16 @@ public class NewsRepository {
             }
         }.execute();
         return isSuccessLiveData;
+    }
+
+    public  LiveData<List<Article>> getAllSavedArticles() {
+        return database.dao().getAllArticles();
+    }
+
+    public void deleteSavedArticle(Article article) {
+        AsyncTask.execute(
+                () -> database.dao().deleteArticle(article)
+        );
     }
 
     public  void onCancel() {
