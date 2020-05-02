@@ -1,6 +1,7 @@
 package com.laioffer.tinnews.ui.search;
 
 
+import android.content.DialogInterface;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,11 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
                     }
             );
         }
+        holder.itemView.setOnClickListener(
+                v -> {
+                    likeListener.onClick(article);
+                });
+
     }
 
     @Override
